@@ -1,4 +1,4 @@
-package com.example.seriesify
+package com.sosa.ignacio.codechallenge.seriesify
 
 import org.junit.Test
 

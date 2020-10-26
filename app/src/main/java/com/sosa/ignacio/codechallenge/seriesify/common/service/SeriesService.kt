@@ -1,7 +1,7 @@
-package com.example.seriesify.common.service
+package com.sosa.ignacio.codechallenge.seriesify.common.service
 
-import com.example.seriesify.common.model.Page
-import com.example.seriesify.common.model.Serie
+import com.sosa.ignacio.codechallenge.seriesify.common.model.Page
+import com.sosa.ignacio.codechallenge.seriesify.common.model.Serie
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

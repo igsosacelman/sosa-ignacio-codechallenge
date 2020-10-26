@@ -1,8 +1,8 @@
-package com.example.seriesify.repositories
+package com.sosa.ignacio.codechallenge.seriesify.repositories
 
-import com.example.seriesify.common.model.Page
-import com.example.seriesify.common.model.Serie
-import com.example.seriesify.common.service.SeriesService
+import com.sosa.ignacio.codechallenge.seriesify.common.model.Page
+import com.sosa.ignacio.codechallenge.seriesify.common.model.Serie
+import com.sosa.ignacio.codechallenge.seriesify.common.service.SeriesService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,4 +1,4 @@
-package com.example.seriesify.repositories
+package com.sosa.ignacio.codechallenge.seriesify.repositories
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

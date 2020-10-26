@@ -1,4 +1,4 @@
-package com.example.seriesify
+package com.sosa.ignacio.codechallenge.seriesify
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

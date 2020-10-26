@@ -1,4 +1,4 @@
-package com.example.seriesify.common.model
+package com.sosa.ignacio.codechallenge.seriesify.common.model
 
 import com.google.gson.annotations.SerializedName
 

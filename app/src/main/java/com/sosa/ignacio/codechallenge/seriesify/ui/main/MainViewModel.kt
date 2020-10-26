@@ -1,13 +1,13 @@
-package com.example.seriesify.ui.main
+package com.sosa.ignacio.codechallenge.seriesify.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seriesify.common.model.Page
-import com.example.seriesify.common.model.Serie
-import com.example.seriesify.repositories.DefaultSeriesRepository
-import com.example.seriesify.repositories.SeriesRepository
+import com.sosa.ignacio.codechallenge.seriesify.common.model.Page
+import com.sosa.ignacio.codechallenge.seriesify.common.model.Serie
+import com.sosa.ignacio.codechallenge.seriesify.repositories.DefaultSeriesRepository
+import com.sosa.ignacio.codechallenge.seriesify.repositories.SeriesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

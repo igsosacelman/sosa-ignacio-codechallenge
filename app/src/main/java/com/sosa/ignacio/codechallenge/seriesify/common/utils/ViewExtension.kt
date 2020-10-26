@@ -1,4 +1,4 @@
-package com.example.seriesify.common.utils
+package com.sosa.ignacio.codechallenge.seriesify.common.utils
 
 import android.view.View
 

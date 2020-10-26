@@ -1,4 +1,4 @@
-package com.example.seriesify.ui.main
+package com.sosa.ignacio.codechallenge.seriesify.ui.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.seriesify.R
-import com.example.seriesify.common.utils.togglePresence
-import com.example.seriesify.databinding.MainFragmentBinding
+import com.sosa.ignacio.codechallenge.seriesify.R
+import com.sosa.ignacio.codechallenge.seriesify.common.utils.togglePresence
+import com.sosa.ignacio.codechallenge.seriesify.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
 

@@ -1,8 +1,8 @@
-package com.example.seriesify
+package com.sosa.ignacio.codechallenge.seriesify
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.seriesify.ui.main.MainFragment
+import com.sosa.ignacio.codechallenge.seriesify.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
