@@ -27,6 +27,14 @@
         <item name="android:fontFamily">@font/sfns_bold</item>
     </style>
 
+    <style name="SFNSBold.Medium">
+        <item name="android:textSize">@dimen/font_medium</item>
+    </style>
+
+    <style name="SFNSBold.Medium.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="SFNSBold.Huge">
         <item name="android:textSize">@dimen/font_huge</item>
     </style>

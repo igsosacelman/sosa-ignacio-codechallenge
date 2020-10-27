@@ -13,7 +13,7 @@
     <color name="white">#ffffff</color>
 
     <!-- Component colors -->
-    <color name="black_transparent_genre">#1e2b31</color>
+    <color name="black_transparent_genre">#801e2b31</color>
     <color name="black_main_view">#1b1b1b</color>
 
 </resources>

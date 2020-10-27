@@ -1,11 +1,14 @@
 package com.sosa.ignacio.codechallenge.seriesify.ui.main
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Media
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Page
+import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.DefaultConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.media.DefaultMediaRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.media.MediaRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -19,10 +22,37 @@ class MainViewModel() : ViewModel() {
     val mediaList: LiveData<List<Media>>
         get() = _mediaList
 
+    private val _mediaHelper = MutableLiveData<MediaHelper>()
+    val mediaHelper: LiveData<MediaHelper>
+        get() = _mediaHelper
+
     private val mediaRepository : MediaRepository = DefaultMediaRepository()
 
     init {
-        retrieveMedia()
+        viewModelScope.launch {
+            _loading.value = true
+            initConfiguration()
+            retrieveMedia()
+            _loading.value = false
+        }
+    }
+
+    private suspend fun initConfiguration() {
+        withContext(viewModelScope.coroutineContext) {
+            DefaultConfigurationRepository.getMediaHelper({ mediaHelper -> onSuccess(mediaHelper)}, {onFailure()})
+        }
+    }
+
+    private fun retrieveMedia() {
+        viewModelScope.launch {
+            _loading.value = true
+            mediaRepository.getPopular({ page -> onSuccess(page)}, {onFailure()})
+            _loading.value = false
+        }
+    }
+
+    private fun onSuccess(mediaHelper: MediaHelper) {
+        _mediaHelper.value = mediaHelper
     }
 
     private fun onSuccess(page: Page<Media>) {
@@ -31,16 +61,6 @@ class MainViewModel() : ViewModel() {
 
     //TODO: show error message
     private fun onFailure() {}
-
-    private fun retrieveMedia() {
-        viewModelScope.launch {
-            _loading.value = true
-            withContext(Dispatchers.IO) {
-                mediaRepository.getPopular({ page -> onSuccess(page)}, {onFailure()})
-            }
-            _loading.value = false
-        }
-    }
 
     //TODO: onClickListener opens item details
     fun onMediaItemClicked(item: Media) {}

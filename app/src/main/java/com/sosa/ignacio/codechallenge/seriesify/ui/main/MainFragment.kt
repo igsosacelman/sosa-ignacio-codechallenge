@@ -18,7 +18,7 @@ class MainFragment : Fragment() {
     private lateinit var binding: MainFragmentBinding
     private lateinit var viewModel: MainViewModel
 
-    private val mainMediaListAdapter: MediaListAdapter by lazy { MediaListAdapter { viewModel.onMediaItemClicked(it) } }
+    private lateinit  var mainMediaListAdapter: MediaListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
@@ -33,12 +33,12 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setup()
 //        setListeners()
     }
 
-    private fun setup() {
+    private fun setup(mediaHelper: MediaHelper) {
         with(binding.mainMediaList) {
+            mainMediaListAdapter = MediaListAdapter(mediaHelper) { viewModel.onMediaItemClicked(it) }
             layoutManager = LinearLayoutManager(context)
             adapter = mainMediaListAdapter
         }
@@ -54,6 +54,13 @@ class MainFragment : Fragment() {
         viewModel.mediaList.observe(this, Observer { mediaList ->
             mediaList?.let {
                 mainMediaListAdapter.submitList(it)
+                mainMediaListAdapter.notifyDataSetChanged()
+            }
+        })
+
+        viewModel.mediaHelper.observe(this, Observer { mediaHelper ->
+            mediaHelper?.let {
+                setup(mediaHelper)
             }
         })
     }
