@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Spacing -->
+    <dimen name="spacing_none">0dp</dimen>
+    <dimen name="spacing_tiny">1dp</dimen>
+    <dimen name="spacing_small">2dp</dimen>
+    <dimen name="spacing_medium">5dp</dimen>
+    <dimen name="spacing_medium_extra">10dp</dimen>
+    <dimen name="spacing_large">15dp</dimen>
+    <dimen name="spacing_large_extra">25dp</dimen>
+    <dimen name="spacing_big">30dp</dimen>
+    <dimen name="spacing_big_extra">35dp</dimen>
+    <dimen name="spacing_huge">40dp</dimen>
+    <dimen name="spacing_huge_extra">45dp</dimen>
+    <dimen name="spacing_largest">50dp</dimen>
+    <dimen name="spacing_largest_extra">65dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="font_tiny">4sp</dimen>
+    <dimen name="font_small">8sp</dimen>
+    <dimen name="font_medium">12sp</dimen>
+    <dimen name="font_medium_extra">17sp</dimen>
+    <dimen name="font_large">18sp</dimen>
+    <dimen name="font_large_extra">20sp</dimen>
+    <dimen name="font_big">22sp</dimen>
+    <dimen name="font_huge">24sp</dimen>
+
+</resources>

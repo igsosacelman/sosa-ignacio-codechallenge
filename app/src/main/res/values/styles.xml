@@ -7,4 +7,46 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- SFNS Medium -->
+
+    <style name="SFNSRegular">
+        <item name="android:fontFamily">>@font/sfns_regular</item>
+    </style>
+
+    <style name="SFNSRegular.MediumExtra">
+        <item name="android:textSize">@dimen/font_medium_extra</item>
+    </style>
+
+    <style name="SFNSRegular.MediumExtra.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- SFNS Bold -->
+
+    <style name="SFNSBold">
+        <item name="android:fontFamily">@font/sfns_bold</item>
+    </style>
+
+    <style name="SFNSBold.Huge">
+        <item name="android:textSize">@dimen/font_huge</item>
+    </style>
+
+    <style name="SFNSBold.Huge.IceBlue">
+        <item name="android:textColor">@color/ice_blue</item>
+    </style>
+
+    <!-- Proxima Nova Soft Medium -->
+
+    <style name="ProximaNovaSoftRegular">
+        <item name="android:fontFamily">@font/proxima_nova_regular</item>
+    </style>
+
+    <style name="ProximaNovaSoftRegular.Medium">
+        <item name="android:textSize">@dimen/font_medium</item>
+    </style>
+
+    <style name="ProximaNovaSoftRegular.Medium.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>
