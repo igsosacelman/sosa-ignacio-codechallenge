@@ -65,11 +65,6 @@ class DetailFragment : Fragment() {
             }
             subscription.setOnClickListener {
                 subscription.isSelected = !subscription.isSelected
-//                if(subscription.isSelected) {
-//                    subscription.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white_opacity_45)
-//                } else {
-//                    subscription.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.transparent)
-//                }
             }
         }
     }

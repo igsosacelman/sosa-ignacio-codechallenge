@@ -29,4 +29,7 @@
 
     <dimen name="font_toolbar_main">17sp</dimen>
 
+    <dimen name="detail_poster_max_height">273dp</dimen>
+    <dimen name="detail_poster_min_height">57dp</dimen>
+
 </resources>
