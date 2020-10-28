@@ -5,11 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sosa.ignacio.codechallenge.seriesify.common.model.Configuration
-import com.sosa.ignacio.codechallenge.seriesify.common.model.Genre
-import com.sosa.ignacio.codechallenge.seriesify.common.model.ImageConfiguration
-import com.sosa.ignacio.codechallenge.seriesify.common.model.Media
-import com.sosa.ignacio.codechallenge.seriesify.common.utils.loadFromUrl
+import com.sosa.ignacio.codechallenge.seriesify.common.model.*
+import com.sosa.ignacio.codechallenge.seriesify.common.utils.loadFromUrlWithRoundedCorners
 import com.sosa.ignacio.codechallenge.seriesify.common.utils.toGrayScale
 import com.sosa.ignacio.codechallenge.seriesify.databinding.ItemMediaListBinding
 
@@ -42,13 +39,14 @@ class MediaListViewHolder(binding: ItemMediaListBinding) : RecyclerView.ViewHold
         item?.let { media ->
 
             val firstGenre = mediaHelper.getGenreById(media.genreIds.first())
-            val fullImageUrl = mediaHelper.fullImagePathUrlFrom(media.backdropPath,ImageConfiguration.DEFAULT_BACKDROP_SIZE_INDEX)
+            val fullImageUrl = mediaHelper.fullBackdropPathUrlFrom(media.backdropPath,ImageConfiguration.DEFAULT_BACKDROP_SIZE_INDEX)
             fullImageUrl?.let {
 
                 name.text = media.name
+
                 background
+                    .loadFromUrlWithRoundedCorners(itemView.context,fullImageUrl,20)
                     .toGrayScale()
-                    .loadFromUrl(context = itemView.context, source = fullImageUrl)
 
                 firstGenre?.let {
                     genre.text = it.name
@@ -67,15 +65,4 @@ class MediaDiffCallback : DiffUtil.ItemCallback<Media>() {
     override fun areContentsTheSame(oldItem: Media, newItem: Media): Boolean {
         return oldItem.name == newItem.name
     }
-}
-
-data class MediaHelper(
-    private val configuration: Configuration,
-    private val genres: List<Genre>
-) {
-
-    fun fullImagePathUrlFrom(path: String, sizeIndex: Int) =
-        configuration.images.secureBaseUrl + configuration.images.backdropSizes[sizeIndex] + path
-
-    fun getGenreById(id: Int) = genres.find { it.id == id }
 }

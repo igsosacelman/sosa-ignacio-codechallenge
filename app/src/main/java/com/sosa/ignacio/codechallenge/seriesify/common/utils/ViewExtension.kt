@@ -6,8 +6,8 @@ import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 /**
  * Toggles [View] visibility, according to [present], between [View.VISIBLE] and [View.GONE].
@@ -26,12 +26,12 @@ fun ImageView.loadFromUrl(context: Context, source: String) = apply {
 }
 
 /**
- * Load [ImageView] with an image from [source] and with [requestOption] as configuration
+ * Load [ImageView] with an image from [source] and with [cornerRadius] as part of the configuration
  */
-fun ImageView.loadFromUrl(context: Context, source: String, requestOption: RequestOptions) = apply {
+fun ImageView.loadFromUrlWithRoundedCorners(context: Context, source: String, cornerRadius: Int) = apply {
     Glide.with(context)
         .load(source)
-        .apply(requestOption)
+        .transform(FitCenter(), RoundedCorners(20))
         .into(this)
 }
 

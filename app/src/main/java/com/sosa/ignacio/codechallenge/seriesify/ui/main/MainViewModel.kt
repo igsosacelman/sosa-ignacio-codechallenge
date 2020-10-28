@@ -5,10 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Media
+import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Page
+import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.ConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.DefaultConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.media.DefaultMediaRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.media.MediaRepository
+import com.sosa.ignacio.codechallenge.seriesify.common.utils.combineBooleans
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -26,33 +29,64 @@ class MainViewModel() : ViewModel() {
     val mediaHelper: LiveData<MediaHelper>
         get() = _mediaHelper
 
-    private val mediaRepository : MediaRepository = DefaultMediaRepository()
+    private val _itemSelected = MutableLiveData<Media>()
+    val itemSelected: LiveData<Media>
+        get() = _itemSelected
+
+    private val genresReady = MutableLiveData<Boolean>()
+    private val configurationReady = MutableLiveData<Boolean>()
+
+    val initConfigurationReady = combineBooleans(genresReady,configurationReady)
+
+    private val mediaRepository : MediaRepository = DefaultMediaRepository
+    private val configurationRepository : ConfigurationRepository = DefaultConfigurationRepository
 
     init {
         viewModelScope.launch {
             _loading.value = true
             initConfiguration()
-            retrieveMedia()
             _loading.value = false
         }
     }
 
     private suspend fun initConfiguration() {
         withContext(viewModelScope.coroutineContext) {
-            DefaultConfigurationRepository.getMediaHelper({ mediaHelper -> onSuccess(mediaHelper)}, {onFailure()})
+            configurationRepository.getConfiguration({ onConfigurationReady() }, { onFailure() })
+            configurationRepository.getGenres({ onGenresReady() }, { onFailure() })
         }
     }
 
-    private fun retrieveMedia() {
+    fun onConfigReady() {
         viewModelScope.launch {
-            _loading.value = true
-            mediaRepository.getPopular({ page -> onSuccess(page)}, {onFailure()})
-            _loading.value = false
+            createMediaHelper()
         }
+    }
+
+    private suspend fun createMediaHelper() {
+        withContext(viewModelScope.coroutineContext) {
+            configurationRepository.getMediaHelper({ mediaHelper -> onSuccess(mediaHelper)}, {onFailure()})
+        }
+    }
+
+    private suspend fun retrieveMedia() {
+        withContext(viewModelScope.coroutineContext) {
+            mediaRepository.getPopular({ page -> onSuccess(page)}, {onFailure()})
+        }
+    }
+
+    private fun onGenresReady() {
+        genresReady.value = true
+    }
+
+    private fun onConfigurationReady() {
+        configurationReady.value = true
     }
 
     private fun onSuccess(mediaHelper: MediaHelper) {
         _mediaHelper.value = mediaHelper
+        viewModelScope.launch {
+            retrieveMedia()
+        }
     }
 
     private fun onSuccess(page: Page<Media>) {
@@ -63,5 +97,12 @@ class MainViewModel() : ViewModel() {
     private fun onFailure() {}
 
     //TODO: onClickListener opens item details
-    fun onMediaItemClicked(item: Media) {}
+    fun onMediaItemClicked(item: Media) {
+        viewModelScope.launch {
+            mediaRepository.saveSelectedMedia(item)
+            _itemSelected.value = item
+        }
+    }
+
+
 }

@@ -3,9 +3,9 @@ package com.sosa.ignacio.codechallenge.seriesify.common.repositories.configurati
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Configuration
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Genre
 import com.sosa.ignacio.codechallenge.seriesify.common.model.GenreResponse
+import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.BaseRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.service.ConfigurationService
-import com.sosa.ignacio.codechallenge.seriesify.ui.main.MediaHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,7 +79,7 @@ object DefaultConfigurationRepository : BaseRepository(), ConfigurationRepositor
         }
     }
 
-    fun getMediaHelper(onSuccess: (MediaHelper) -> Unit?, onFailure: () -> Unit) {
+    override fun getMediaHelper(onSuccess: (MediaHelper) -> Unit?, onFailure: () -> Unit) {
         mediaHelper?.let {
             onSuccess.invoke(it)
         } ?: run(onFailure)

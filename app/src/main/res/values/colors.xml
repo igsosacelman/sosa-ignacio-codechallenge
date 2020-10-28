@@ -11,9 +11,11 @@
     <color name="black_39">#62000000</color>
     <color name="ice_blue">#e1f5ff</color>
     <color name="white">#ffffff</color>
+    <color name="white_opacity_45">#73ffffff</color>
 
     <!-- Component colors -->
     <color name="black_transparent_genre">#801e2b31</color>
     <color name="black_main_view">#1b1b1b</color>
+    <color name="black_detail_overview_title">#383838</color>
 
 </resources>

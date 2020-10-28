@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sosa.ignacio.codechallenge.seriesify.R
+import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
 import com.sosa.ignacio.codechallenge.seriesify.common.utils.togglePresence
 import com.sosa.ignacio.codechallenge.seriesify.databinding.MainFragmentBinding
 
@@ -33,7 +35,11 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setListeners()
+        if(!viewModel.mediaList.value.isNullOrEmpty() && viewModel.mediaHelper.value != null) {
+            setup(viewModel.mediaHelper.value!!)
+            mainMediaListAdapter.submitList(viewModel.mediaList.value)
+            mainMediaListAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun setup(mediaHelper: MediaHelper) {
@@ -43,8 +49,6 @@ class MainFragment : Fragment() {
             adapter = mainMediaListAdapter
         }
     }
-
-    private fun setListeners() {}
 
     private fun setObservers() {
         viewModel.loading.observe(this, Observer { loading ->
@@ -63,9 +67,20 @@ class MainFragment : Fragment() {
                 setup(mediaHelper)
             }
         })
+
+        viewModel.itemSelected.observe(this, Observer { item ->
+            item?.let {
+                showMediaDetail()
+            }
+        })
+
+        viewModel.initConfigurationReady.observe(this, Observer { ready ->
+            if(ready)
+                viewModel.onConfigReady()
+        })
     }
 
-    companion object {
-        fun newInstance() = MainFragment()
+    private fun showMediaDetail() {
+        findNavController().navigate(R.id.action_mainFragment_to_detailFragment)
     }
 }

@@ -8,4 +8,8 @@ interface MediaRepository {
     fun getPopular(onSuccess: (Page<Media>) -> Unit?, onFailure: () -> Unit)
 
     fun getDiscover(onSuccess: (Page<Media>) -> Unit?, onFailure: () -> Unit)
+
+    fun getSelectedMedia() : Media?
+
+    fun saveSelectedMedia(item: Media)
 }

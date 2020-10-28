@@ -15,9 +15,17 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:background="@android:color/black"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="start|bottom"
+                android:layout_marginStart="18dp"
+                android:layout_marginBottom="13dp"
+                android:src="@drawable/ic_search" />
 
             <TextView
                 android:id="@+id/toolbarTitle"
@@ -25,8 +33,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:layout_marginBottom="12dp"
-                android:textAppearance="@style/SFNSRegular.MediumExtra.White"
-                android:text="TV Show reminder"/>
+                android:text="@string/main_toolbar_title"
+                android:textAppearance="@style/SFNSRegular.White"
+                android:textSize="@dimen/font_toolbar_main" />
 
         </FrameLayout>
 
@@ -34,10 +43,10 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Todas"
-            android:textAllCaps="true"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/main_media_list_title"
+            android:textAllCaps="true"
             android:textAppearance="@style/ProximaNovaSoftRegular.Medium.White"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
@@ -57,13 +66,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="25dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
             android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
