@@ -5,11 +5,13 @@ data class MediaHelper(
     private val genres: List<Genre>
 ) {
 
-    fun fullBackdropPathUrlFrom(path: String, sizeIndex: Int) =
+    fun fullBackdropPathUrlFrom(path: String?, sizeIndex: Int) = path?.let {
         configuration.images.secureBaseUrl + configuration.images.backdropSizes[sizeIndex] + path
+    }
 
-    fun fullPosterPathUrlFrom(path: String, sizeIndex: Int) =
+    fun fullPosterPathUrlFrom(path: String?, sizeIndex: Int) = path?.let {
         configuration.images.secureBaseUrl + configuration.images.posterSizes[sizeIndex] + path
+    }
 
     fun getGenreById(id: Int) = genres.find { it.id == id }
 }

@@ -46,13 +46,17 @@ class DetailFragment : Fragment() {
 
                 with(binding) {
 
-                    poster.loadFromUrlWithRoundedCorners(requireContext(),posterImageUrl,20)
-                    backdrop.loadFromUrl(requireContext(),backdropImageUrl)
+                    posterImageUrl?.let {
+                        poster.loadFromUrlWithRoundedCorners(requireContext(),posterImageUrl,20)
+                    }
+
+                    backdropImageUrl?.let {
+                        backdrop.loadFromUrl(requireContext(),backdropImageUrl)
+                    }
 
                     name.text = media.name
                     year.text = media.year
                     description.text = media.overview
-
                 }
             }
         })

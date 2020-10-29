@@ -27,12 +27,6 @@ class DetailViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            _currentMedia.value = mediaRepository.getSelectedMedia()
-        }
-    }
-
-    init {
-        viewModelScope.launch {
             initConfiguration()
             _currentMedia.value = mediaRepository.getSelectedMedia()
         }
