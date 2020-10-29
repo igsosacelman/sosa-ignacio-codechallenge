@@ -1,5 +1,6 @@
 package com.sosa.ignacio.codechallenge.seriesify.ui.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,6 +24,10 @@ class DetailViewModel : ViewModel() {
 
     private val _mediaHelper = MutableLiveData<MediaHelper>()
 
+    private var _subscription = MutableLiveData<Boolean>()
+    val subscription: LiveData<Boolean>
+        get() = _subscription
+
     val mediaDetails = combine(_currentMedia,_mediaHelper)
 
     init {
@@ -45,10 +50,13 @@ class DetailViewModel : ViewModel() {
     //TODO: show error message
     private fun onFailure() {}
 
-    fun onSubscriptionClicked(subscriptionManager: SubscriptionManager) {
+    fun onSubscriptionClicked(
+        subscriptionManager: SubscriptionManager,
+        newState: Boolean
+    ) {
+        _subscription.value = newState
         _currentMedia.value?.let {
             subscriptionManager.handleSubscription(it)
         }
-
     }
 }

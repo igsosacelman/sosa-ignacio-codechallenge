@@ -30,7 +30,7 @@ class DetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        subscriptionManager = SubscriptionManager()
+        subscriptionManager = SubscriptionManager(requireContext())
         setObservers()
     }
 
@@ -46,6 +46,7 @@ class DetailFragment : Fragment() {
                 val helper = details.second
                 val backdropImageUrl = helper.fullBackdropPathUrlFrom(media.backdropPath,ImageConfiguration.Companion.BackdropSizes.ORIGINAL.ordinal)
                 val posterImageUrl = helper.fullPosterPathUrlFrom(media.posterPath, ImageConfiguration.Companion.PosterSizes.ORIGINAL.ordinal)
+                val isSubscribed = subscriptionManager.isSubscribed(media)
 
                 with(binding) {
 
@@ -60,7 +61,19 @@ class DetailFragment : Fragment() {
                     name.text = media.name
                     year.text = media.year
                     description.text = media.overview
+
+                    subscription.run {
+                        isSelected = isSubscribed
+                        text = if(isSubscribed) context.resources.getString(R.string.detail_button_is_subscribed) else context.resources.getString(R.string.detail_button_is_not_subscribed)
+                    }
                 }
+            }
+        })
+
+        viewModel.subscription.observe(this, Observer { isSubscribed ->
+            binding.subscription.run {
+                isSelected = isSubscribed
+                text = if(isSubscribed) context.resources.getString(R.string.detail_button_is_subscribed) else context.resources.getString(R.string.detail_button_is_not_subscribed)
             }
         })
     }
@@ -71,8 +84,7 @@ class DetailFragment : Fragment() {
                 findNavController().navigateUp()
             }
             subscription.setOnClickListener {
-                subscription.isSelected = !subscription.isSelected
-                viewModel.onSubscriptionClicked(subscriptionManager)
+                viewModel.onSubscriptionClicked(subscriptionManager, !subscription.isSelected)
             }
         }
     }
