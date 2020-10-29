@@ -32,4 +32,8 @@
     <dimen name="detail_poster_max_height">273dp</dimen>
     <dimen name="detail_poster_min_height">57dp</dimen>
 
+    <dimen name="item_search_list_first_item_top_margin">6dp</dimen>
+    <dimen name="item_search_list_poster_height">72dp</dimen>
+    <dimen name="item_search_list_poster_width">48dp</dimen>
+
 </resources>

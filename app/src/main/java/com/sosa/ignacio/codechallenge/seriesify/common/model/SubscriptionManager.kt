@@ -36,10 +36,6 @@ class SubscriptionManager(context: Context) {
 
     fun isSubscribed(media: Media) = _subscriptions != null && _subscriptions!!.contains(media)
 
-    private fun createNewList(media: Media) {
-        _subscriptions = listOf(media).toMutableList()
-    }
-
     private fun subscribe(media: Media) {
         _subscriptions!!.add(media)
         commit()

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black_main_view">
+
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="@dimen/item_search_list_poster_width"
+            android:layout_height="@dimen/item_search_list_poster_height"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bottomDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/bottomDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/grey_item_search_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/poster" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/SFNSBold.Large.White"
+            app:layout_constraintBottom_toTopOf="@id/genre"
+            app:layout_constraintEnd_toStartOf="@id/subscription"
+            app:layout_constraintStart_toStartOf="@id/bottomDivider"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Breaking bad" />
+
+        <TextView
+            android:id="@+id/genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.4"
+            android:textAllCaps="true"
+            android:textAppearance="@style/SFNSRegular.White"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="drama" />
+
+        <TextView
+            android:id="@+id/subscription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:alpha="0.4"
+            android:background="@drawable/bg_subscription_item_search_selector"
+            android:paddingStart="11dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="11dp"
+            android:paddingBottom="4dp"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textAppearance="@style/SFNSRegular.Medium"
+            android:textColor="@drawable/cl_subscription_text_item_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/name"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Agregar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

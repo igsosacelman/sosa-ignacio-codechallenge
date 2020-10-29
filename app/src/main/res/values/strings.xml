@@ -3,6 +3,7 @@
 
     <!-- Main -->
     <string name="main_toolbar_title">TV Show Reminder</string>
+    <string name="main_toolbar_cancel">Cancel</string>
     <string name="main_media_list_title">Todas</string>
     <string name="main_subscription_list_title">Suscriptas</string>
 
@@ -10,5 +11,7 @@
     <string name="detail_overview_title">Overview</string>
     <string name="detail_button_is_subscribed">suscripto</string>
     <string name="detail_button_is_not_subscribed">suscribirme</string>
+    <string name="item_search_is_subscribed">agregado</string>
+    <string name="item_search_is_not_subscribed">agregar</string>
 
 </resources>

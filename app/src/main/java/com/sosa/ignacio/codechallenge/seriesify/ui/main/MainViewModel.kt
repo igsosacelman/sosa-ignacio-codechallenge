@@ -40,6 +40,11 @@ class MainViewModel : ViewModel() {
     val subscriptions: LiveData<List<Media>>
         get() = _subscriptions
 
+    private val _searchMode = MutableLiveData<Boolean>()
+    val searchMode: LiveData<Boolean>
+        get() = _searchMode
+
+
     private val genresReady = MutableLiveData<Boolean>()
     private val configurationReady = MutableLiveData<Boolean>()
 
@@ -114,6 +119,22 @@ class MainViewModel : ViewModel() {
 
     fun loadSubscriptions(subscriptionManager: SubscriptionManager) {
         this.subscriptionManager = subscriptionManager
+    }
+
+    fun onSearchIconClicked() {
+        if(_searchMode.value != true)
+            _searchMode.value = true
+    }
+
+    fun onCancelSearchClicked() {
+        if(_searchMode.value != false){
+            _searchMode.value = false
+            commitSubscriptions()
+        }
+    }
+
+    private fun commitSubscriptions() {
+        _subscriptions.value = _subscriptions.value
     }
 
     //TODO: show error message

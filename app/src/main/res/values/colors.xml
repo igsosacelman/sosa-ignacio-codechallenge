@@ -17,5 +17,6 @@
     <color name="black_transparent_genre">#801e2b31</color>
     <color name="black_main_view">#1b1b1b</color>
     <color name="black_detail_overview_title">#383838</color>
+    <color name="grey_item_search_divider">#979797</color>
 
 </resources>

@@ -16,14 +16,17 @@ import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
 import com.sosa.ignacio.codechallenge.seriesify.common.model.SubscriptionManager
 import com.sosa.ignacio.codechallenge.seriesify.common.utils.togglePresence
 import com.sosa.ignacio.codechallenge.seriesify.databinding.MainFragmentBinding
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: MainFragmentBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var subscriptionManager: SubscriptionManager
 
     private lateinit  var mainMediaListAdapter: MediaListAdapter
     private lateinit  var subscriptionListAdapter: SubscriptionListAdapter
+    private lateinit  var searchListAdapter: SearchListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
@@ -38,13 +41,15 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadSubscriptions(SubscriptionManager(requireContext()))
+        subscriptionManager = SubscriptionManager(requireContext())
+        viewModel.loadSubscriptions(subscriptionManager)
         if(!viewModel.mediaList.value.isNullOrEmpty() && viewModel.mediaHelper.value != null) {
             setup(viewModel.mediaHelper.value!!)
             mainMediaListAdapter.submitList(viewModel.mediaList.value)
             mainMediaListAdapter.notifyDataSetChanged()
             viewModel.getSubscriptions()
         }
+        setListeners()
     }
 
     private fun setup(mediaHelper: MediaHelper) {
@@ -58,6 +63,11 @@ class MainFragment : Fragment() {
             subscriptionListAdapter = SubscriptionListAdapter(mediaHelper) { viewModel.onMediaItemClicked(it) }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = subscriptionListAdapter
+        }
+        with(binding.searchList) {
+            searchListAdapter = SearchListAdapter(mediaHelper,subscriptionManager)
+            layoutManager = LinearLayoutManager(context)
+            adapter = searchListAdapter
         }
     }
 
@@ -101,6 +111,27 @@ class MainFragment : Fragment() {
                 subscriptionListAdapter.notifyDataSetChanged()
             }
         })
+
+        viewModel.searchMode.observe(this, Observer { searchMode ->
+            if(searchMode) {
+                searchList.visibility = View.VISIBLE
+                searchListAdapter.submitList(viewModel.mediaList.value)
+                searchListAdapter.notifyDataSetChanged()
+            } else {
+                searchList.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun setListeners() {
+       with(binding) {
+           searchIcon.setOnClickListener {
+               viewModel.onSearchIconClicked()
+           }
+           toolbarCancel.setOnClickListener {
+               viewModel.onCancelSearchClicked()
+           }
+       }
     }
 
     private fun showMediaDetail() {
