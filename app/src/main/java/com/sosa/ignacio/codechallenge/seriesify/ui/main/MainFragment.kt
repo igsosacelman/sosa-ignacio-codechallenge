@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -50,6 +51,7 @@ class MainFragment : Fragment() {
         with(binding.mainMediaList) {
             mainMediaListAdapter = MediaListAdapter(mediaHelper) { viewModel.onMediaItemClicked(it) }
             layoutManager = LinearLayoutManager(context)
+            ViewCompat.setNestedScrollingEnabled(this,false)
             adapter = mainMediaListAdapter
         }
         with(binding.subscriptionList) {
