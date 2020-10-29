@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.sosa.ignacio.codechallenge.seriesify.R
 import com.sosa.ignacio.codechallenge.seriesify.common.model.ImageConfiguration
+import com.sosa.ignacio.codechallenge.seriesify.common.model.SubscriptionManager
 import com.sosa.ignacio.codechallenge.seriesify.common.utils.loadFromUrl
 import com.sosa.ignacio.codechallenge.seriesify.common.utils.loadFromUrlWithRoundedCorners
 import com.sosa.ignacio.codechallenge.seriesify.databinding.DetailFragmentBinding
@@ -19,6 +20,7 @@ class DetailFragment : Fragment() {
 
     private lateinit var binding: DetailFragmentBinding
     private lateinit var viewModel: DetailViewModel
+    private lateinit var subscriptionManager: SubscriptionManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.detail_fragment, container, false)
@@ -28,6 +30,7 @@ class DetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        subscriptionManager = SubscriptionManager()
         setObservers()
     }
 
@@ -69,6 +72,7 @@ class DetailFragment : Fragment() {
             }
             subscription.setOnClickListener {
                 subscription.isSelected = !subscription.isSelected
+                viewModel.onSubscriptionClicked(subscriptionManager)
             }
         }
     }

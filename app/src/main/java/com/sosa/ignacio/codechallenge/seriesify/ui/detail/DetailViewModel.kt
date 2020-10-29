@@ -1,11 +1,11 @@
 package com.sosa.ignacio.codechallenge.seriesify.ui.detail
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Media
 import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
+import com.sosa.ignacio.codechallenge.seriesify.common.model.SubscriptionManager
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.ConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.DefaultConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.media.DefaultMediaRepository
@@ -44,4 +44,11 @@ class DetailViewModel : ViewModel() {
 
     //TODO: show error message
     private fun onFailure() {}
+
+    fun onSubscriptionClicked(subscriptionManager: SubscriptionManager) {
+        _currentMedia.value?.let {
+            subscriptionManager.handleSubscription(it)
+        }
+
+    }
 }
