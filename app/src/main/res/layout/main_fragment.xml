@@ -40,7 +40,30 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/subscriptionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/main_subscription_list_title"
+            android:textAllCaps="true"
+            android:textAppearance="@style/ProximaNovaSoftRegular.Medium.White"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subscriptionList"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="13dp"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subscriptionTitle" />
+
+        <TextView
+            android:id="@+id/feedTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -49,7 +72,7 @@
             android:textAllCaps="true"
             android:textAppearance="@style/ProximaNovaSoftRegular.Medium.White"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/subscriptionList" />
 
         <ProgressBar
             android:id="@+id/loader"
@@ -72,7 +95,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+            app:layout_constraintTop_toBottomOf="@id/feedTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

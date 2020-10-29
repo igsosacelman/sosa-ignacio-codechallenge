@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Media
 import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Page
+import com.sosa.ignacio.codechallenge.seriesify.common.model.SubscriptionManager
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.ConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.DefaultConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.media.DefaultMediaRepository
@@ -15,7 +16,9 @@ import com.sosa.ignacio.codechallenge.seriesify.common.utils.combineBooleans
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel() : ViewModel() {
+class MainViewModel : ViewModel() {
+
+    private lateinit var subscriptionManager: SubscriptionManager
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean>
@@ -32,6 +35,10 @@ class MainViewModel() : ViewModel() {
     private val _itemSelected = MutableLiveData<Media>()
     val itemSelected: LiveData<Media>
         get() = _itemSelected
+
+    private val _subscriptions = MutableLiveData<List<Media>>()
+    val subscriptions: LiveData<List<Media>>
+        get() = _subscriptions
 
     private val genresReady = MutableLiveData<Boolean>()
     private val configurationReady = MutableLiveData<Boolean>()
@@ -51,7 +58,7 @@ class MainViewModel() : ViewModel() {
 
     private suspend fun initConfiguration() {
         withContext(viewModelScope.coroutineContext) {
-            configurationRepository.getConfiguration({ onConfigurationReady() }, { onFailure() })
+            configurationRepository.getConfiguration({ onApiConfigurationReady() }, { onFailure() })
             configurationRepository.getGenres({ onGenresReady() }, { onFailure() })
         }
     }
@@ -59,7 +66,12 @@ class MainViewModel() : ViewModel() {
     fun onConfigReady() {
         viewModelScope.launch {
             createMediaHelper()
+            getSubscriptions()
         }
+    }
+
+    fun getSubscriptions() {
+        _subscriptions.value = subscriptionManager.subscriptions
     }
 
     private suspend fun createMediaHelper() {
@@ -78,7 +90,7 @@ class MainViewModel() : ViewModel() {
         genresReady.value = true
     }
 
-    private fun onConfigurationReady() {
+    private fun onApiConfigurationReady() {
         configurationReady.value = true
     }
 
@@ -93,10 +105,6 @@ class MainViewModel() : ViewModel() {
         _mediaList.value = page.items
     }
 
-    //TODO: show error message
-    private fun onFailure() {}
-
-    //TODO: onClickListener opens item details
     fun onMediaItemClicked(item: Media) {
         viewModelScope.launch {
             mediaRepository.saveSelectedMedia(item)
@@ -104,5 +112,10 @@ class MainViewModel() : ViewModel() {
         }
     }
 
+    fun loadSubscriptions(subscriptionManager: SubscriptionManager) {
+        this.subscriptionManager = subscriptionManager
+    }
 
+    //TODO: show error message
+    private fun onFailure() {}
 }

@@ -4,6 +4,7 @@
     <!-- Main -->
     <string name="main_toolbar_title">TV Show Reminder</string>
     <string name="main_media_list_title">Todas</string>
+    <string name="main_subscription_list_title">Suscriptas</string>
 
     <!-- Detail -->
     <string name="detail_overview_title">Overview</string>
