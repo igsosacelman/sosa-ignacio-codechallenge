@@ -5,7 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
+import androidx.core.widget.TextViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -50,6 +56,7 @@ class MainFragment : Fragment() {
             viewModel.getSubscriptions()
         }
         setListeners()
+        setSearchBarStyle()
     }
 
     private fun setup(mediaHelper: MediaHelper) {
@@ -115,11 +122,24 @@ class MainFragment : Fragment() {
         viewModel.searchMode.observe(this, Observer { searchMode ->
             if(searchMode) {
                 searchList.visibility = View.VISIBLE
-                searchListAdapter.submitList(viewModel.mediaList.value)
+                search.visibility = View.VISIBLE
+                searchIcon.visibility = View.GONE
+                toolbarCancel.visibility = View.VISIBLE
+                toolbarTitle.visibility = View.GONE
+                searchListAdapter.submitList(viewModel.filteredSearch.value)
                 searchListAdapter.notifyDataSetChanged()
             } else {
                 searchList.visibility = View.GONE
+                search.visibility = View.GONE
+                searchIcon.visibility = View.VISIBLE
+                toolbarCancel.visibility = View.GONE
+                toolbarTitle.visibility = View.VISIBLE
             }
+        })
+
+        viewModel.filteredSearch.observe(this, Observer { filteredMediaList ->
+            searchListAdapter.submitList(filteredMediaList)
+            searchListAdapter.notifyDataSetChanged()
         })
     }
 
@@ -131,7 +151,37 @@ class MainFragment : Fragment() {
            toolbarCancel.setOnClickListener {
                viewModel.onCancelSearchClicked()
            }
+           search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+               override fun onQueryTextSubmit(query: String?): Boolean {
+                   return false
+               }
+
+               override fun onQueryTextChange(newText: String?): Boolean {
+                   newText?.let {
+                       viewModel.onQueryTextChange(it)
+                   }
+                   return true
+               }
+           })
        }
+    }
+
+    private fun setSearchBarStyle() {
+        binding.search.apply {
+            findViewById<ImageView>(R.id.search_close_btn).apply {
+                setColorFilter(ContextCompat.getColor(context, R.color.white_opacity_45))
+            }
+            findViewById<ImageView>(R.id.search_mag_icon).apply {
+                translationX = -20f
+                translationY = 2f
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_search, context.theme);
+                setColorFilter(ContextCompat.getColor(context, R.color.grey_search_icon))
+            }
+            findViewById<EditText>(R.id.search_src_text).apply {
+                TextViewCompat.setTextAppearance(this,R.style.SFNSRegular_MediumMore_White)
+                setHintTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+        }
     }
 
     private fun showMediaDetail() {

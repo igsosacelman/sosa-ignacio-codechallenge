@@ -49,6 +49,7 @@
                 android:text="@string/main_toolbar_cancel"
                 android:textAppearance="@style/SFNSRegular.White"
                 android:textSize="@dimen/font_toolbar_main"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -58,10 +59,14 @@
                 android:layout_height="28dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_searchbar"
                 android:visibility="gone"
+                app:iconifiedByDefault="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/toolbarCancel"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:queryBackground="@android:color/transparent"
+                app:queryHint="@string/main_search_bar_hint" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

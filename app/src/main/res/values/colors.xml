@@ -18,5 +18,8 @@
     <color name="black_main_view">#1b1b1b</color>
     <color name="black_detail_overview_title">#383838</color>
     <color name="grey_item_search_divider">#979797</color>
+    <color name="black_search_bar">#2e2e2e</color>
+    <color name="grey_search_icon">#8e8e93</color>
+    <color name="grey_close_icon">#8f8e94</color>
 
 </resources>

@@ -15,6 +15,7 @@ import com.sosa.ignacio.codechallenge.seriesify.common.repositories.media.MediaR
 import com.sosa.ignacio.codechallenge.seriesify.common.utils.combineBooleans
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class MainViewModel : ViewModel() {
 
@@ -44,6 +45,9 @@ class MainViewModel : ViewModel() {
     val searchMode: LiveData<Boolean>
         get() = _searchMode
 
+    private val _filteredSearch = MutableLiveData<List<Media>>()
+    val filteredSearch: LiveData<List<Media>>
+        get()  = _filteredSearch
 
     private val genresReady = MutableLiveData<Boolean>()
     private val configurationReady = MutableLiveData<Boolean>()
@@ -135,6 +139,12 @@ class MainViewModel : ViewModel() {
 
     private fun commitSubscriptions() {
         _subscriptions.value = _subscriptions.value
+    }
+
+    fun onQueryTextChange(query: String) {
+        _mediaList.value?.let { media ->
+            _filteredSearch.value = media.filter { it.name.toLowerCase(Locale.US).contains(query.toLowerCase(Locale.US)) }
+        }
     }
 
     //TODO: show error message
