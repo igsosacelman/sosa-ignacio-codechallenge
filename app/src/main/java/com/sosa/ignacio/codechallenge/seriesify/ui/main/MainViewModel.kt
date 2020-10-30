@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sosa.ignacio.codechallenge.seriesify.common.model.Media
 import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
-import com.sosa.ignacio.codechallenge.seriesify.common.model.Page
 import com.sosa.ignacio.codechallenge.seriesify.common.model.SubscriptionManager
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.ConfigurationRepository
 import com.sosa.ignacio.codechallenge.seriesify.common.repositories.configuration.DefaultConfigurationRepository
@@ -91,7 +90,7 @@ class MainViewModel : ViewModel() {
 
     private suspend fun retrieveMedia() {
         withContext(viewModelScope.coroutineContext) {
-            mediaRepository.getPopular({ page -> onSuccess(page)}, {onFailure()})
+            mediaRepository.getPopular({ medias -> onSuccess(medias)}, {onFailure()})
         }
     }
 
@@ -110,8 +109,8 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private fun onSuccess(page: Page<Media>) {
-        _mediaList.value = page.items
+    private fun onSuccess(page: List<Media>) {
+        _mediaList.value = page
     }
 
     fun onMediaItemClicked(item: Media) {
@@ -121,13 +120,15 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun loadSubscriptions(subscriptionManager: SubscriptionManager) {
+    fun onViewCreated(subscriptionManager: SubscriptionManager) {
         this.subscriptionManager = subscriptionManager
+        _searchMode.value = false
     }
 
     fun onSearchIconClicked() {
-        if(_searchMode.value != true)
+        if(_searchMode.value != true){
             _searchMode.value = true
+        }
     }
 
     fun onCancelSearchClicked() {
@@ -141,9 +142,19 @@ class MainViewModel : ViewModel() {
         _subscriptions.value = _subscriptions.value
     }
 
-    fun onQueryTextChange(query: String) {
+    fun onQueryTextChange(query: String?) {
         _mediaList.value?.let { media ->
-            _filteredSearch.value = media.filter { it.name.toLowerCase(Locale.US).contains(query.toLowerCase(Locale.US)) }
+            _filteredSearch.value = if(query.isNullOrEmpty()) {
+                media
+            } else {
+                media.filter { it.name.toLowerCase(Locale.US).contains(query.toLowerCase(Locale.US)) }
+            }
+        }
+    }
+
+    fun onFinishScrolling() {
+        viewModelScope.launch {
+            retrieveMedia()
         }
     }
 

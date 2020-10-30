@@ -1,7 +1,6 @@
 package com.sosa.ignacio.codechallenge.seriesify.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,15 @@ import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.TextViewCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sosa.ignacio.codechallenge.seriesify.R
 import com.sosa.ignacio.codechallenge.seriesify.common.model.MediaHelper
 import com.sosa.ignacio.codechallenge.seriesify.common.model.SubscriptionManager
@@ -30,9 +31,9 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var subscriptionManager: SubscriptionManager
 
-    private lateinit  var mainMediaListAdapter: MediaListAdapter
-    private lateinit  var subscriptionListAdapter: SubscriptionListAdapter
-    private lateinit  var searchListAdapter: SearchListAdapter
+    private lateinit var mainMediaListAdapter: MediaListAdapter
+    private lateinit var subscriptionListAdapter: SubscriptionListAdapter
+    private lateinit var searchListAdapter: SearchListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
@@ -48,8 +49,8 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriptionManager = SubscriptionManager(requireContext())
-        viewModel.loadSubscriptions(subscriptionManager)
-        if(!viewModel.mediaList.value.isNullOrEmpty() && viewModel.mediaHelper.value != null) {
+        viewModel.onViewCreated(subscriptionManager)
+        if (!viewModel.mediaList.value.isNullOrEmpty() && viewModel.mediaHelper.value != null) {
             setup(viewModel.mediaHelper.value!!)
             mainMediaListAdapter.submitList(viewModel.mediaList.value)
             mainMediaListAdapter.notifyDataSetChanged()
@@ -63,7 +64,6 @@ class MainFragment : Fragment() {
         with(binding.mainMediaList) {
             mainMediaListAdapter = MediaListAdapter(mediaHelper) { viewModel.onMediaItemClicked(it) }
             layoutManager = LinearLayoutManager(context)
-            ViewCompat.setNestedScrollingEnabled(this,false)
             adapter = mainMediaListAdapter
         }
         with(binding.subscriptionList) {
@@ -84,10 +84,11 @@ class MainFragment : Fragment() {
         })
 
         viewModel.mediaList.observe(this, Observer { mediaList ->
-            mediaList?.let {
-                mainMediaListAdapter.submitList(it)
-                mainMediaListAdapter.notifyDataSetChanged()
-            }
+            mediaList?.filter { !it.backdropPath.isNullOrEmpty() && !it.posterPath.isNullOrEmpty() }
+                .let {
+                    mainMediaListAdapter.submitList(it)
+                    mainMediaListAdapter.notifyDataSetChanged()
+                }
         })
 
         viewModel.mediaHelper.observe(this, Observer { mediaHelper ->
@@ -103,12 +104,12 @@ class MainFragment : Fragment() {
         })
 
         viewModel.initConfigurationReady.observe(this, Observer { ready ->
-            if(ready)
+            if (ready)
                 viewModel.onConfigReady()
         })
 
         viewModel.subscriptions.observe(this, Observer { subscriptions ->
-            if(subscriptions.isNullOrEmpty()) {
+            if (subscriptions.isNullOrEmpty()) {
                 with(binding) {
                     subscriptionTitle.visibility = View.GONE
                     subscriptionList.visibility = View.GONE
@@ -120,12 +121,13 @@ class MainFragment : Fragment() {
         })
 
         viewModel.searchMode.observe(this, Observer { searchMode ->
-            if(searchMode) {
+            if (searchMode) {
                 searchList.visibility = View.VISIBLE
                 search.visibility = View.VISIBLE
                 searchIcon.visibility = View.GONE
                 toolbarCancel.visibility = View.VISIBLE
                 toolbarTitle.visibility = View.GONE
+                search.setQuery(null,false)
                 searchListAdapter.submitList(viewModel.filteredSearch.value)
                 searchListAdapter.notifyDataSetChanged()
             } else {
@@ -144,26 +146,31 @@ class MainFragment : Fragment() {
     }
 
     private fun setListeners() {
-       with(binding) {
-           searchIcon.setOnClickListener {
-               viewModel.onSearchIconClicked()
-           }
-           toolbarCancel.setOnClickListener {
-               viewModel.onCancelSearchClicked()
-           }
-           search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-               override fun onQueryTextSubmit(query: String?): Boolean {
-                   return false
-               }
+        with(binding) {
+            searchIcon.setOnClickListener {
+                viewModel.onSearchIconClicked()
+            }
+            toolbarCancel.setOnClickListener {
+                viewModel.onCancelSearchClicked()
+            }
+            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
-               override fun onQueryTextChange(newText: String?): Boolean {
-                   newText?.let {
-                       viewModel.onQueryTextChange(it)
-                   }
-                   return true
-               }
-           })
-       }
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.onQueryTextChange(newText)
+                    return true
+                }
+            })
+            scrollView.setOnScrollChangeListener { v: NestedScrollView?, _, scrollY: Int, _, oldScrollY: Int ->
+                if(v != null) {
+                    if ((scrollY >= (v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight)) && scrollY > oldScrollY) {
+                        viewModel.onFinishScrolling()
+                    }
+                }
+            }
+        }
     }
 
     private fun setSearchBarStyle() {
@@ -178,7 +185,7 @@ class MainFragment : Fragment() {
                 setColorFilter(ContextCompat.getColor(context, R.color.grey_search_icon))
             }
             findViewById<EditText>(R.id.search_src_text).apply {
-                TextViewCompat.setTextAppearance(this,R.style.SFNSRegular_MediumMore_White)
+                TextViewCompat.setTextAppearance(this, R.style.SFNSRegular_MediumMore_White)
                 setHintTextColor(ContextCompat.getColor(context, R.color.white))
             }
         }

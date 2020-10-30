@@ -9,10 +9,7 @@ import retrofit2.http.Query
 interface MediaService {
 
     @GET("/$SERVER/$MEDIA_TV/popular")
-    fun getPopular(@Query("api_key") apiKey: String) : Call<Page<Media>>
-
-    @GET("/$SERVER/discover/$MEDIA_TV")
-    fun getDiscover(@Query("api_key") apiKey: String) : Call<Page<Media>>
+    fun getPopular(@Query("api_key") apiKey: String, @Query("page") page: String) : Call<Page<Media>>
 
     companion object {
         private const val SERVER = 3

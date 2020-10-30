@@ -12,20 +12,32 @@ object DefaultMediaRepository : BaseRepository(), MediaRepository {
 
     private var currentMedia: Media? = null
 
-    private var currentMediaList: List<Media>? = null
+    private var currentMediaList: MutableList<Media>? = null
+
+    private var currentPage = 1
+
+    private var totalPages: Int? = null
 
     private val service = retrofit.create(MediaService::class.java)
 
-    override fun getPopular(onSuccess: (Page<Media>) -> Unit?, onFailure: () -> Unit) {
+    override fun getPopular(onSuccess: (List<Media>) -> Unit?, onFailure: () -> Unit) {
         service
-            .getPopular(apiKey)
+            .getPopular(apiKey, currentPage.toString())
             .enqueue(object : Callback<Page<Media>> {
 
                 override fun onResponse(call: Call<Page<Media>>, response: Response<Page<Media>>) {
                     if (response.body() != null && response.code() == OK_HTTP) {
                         with(response.body() as Page<Media>) {
-                            currentMediaList = this.items
-                            onSuccess.invoke(this)
+                            this@DefaultMediaRepository.totalPages = totalPages
+                            currentMediaList?.let {
+                                it.addAll(this.items)
+                            } ?: run {
+                                currentMediaList = this.items.toMutableList()
+                            }
+                            if(currentPage <= totalPages) {
+                                currentPage++
+                            }
+                            onSuccess.invoke(currentMediaList!!.toList())
                         }
                     } else {
                         onFailure.invoke()
@@ -37,8 +49,6 @@ object DefaultMediaRepository : BaseRepository(), MediaRepository {
                 }
             })
     }
-
-    override fun getDiscover(onSuccess: (Page<Media>) -> Unit?, onFailure: () -> Unit) {}
 
     override fun getSelectedMedia(): Media? = currentMedia
 
